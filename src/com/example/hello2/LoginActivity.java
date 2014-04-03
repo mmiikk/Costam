@@ -39,13 +39,12 @@ public class LoginActivity extends Activity {
 		
     	if(pref.getBoolean("isLogged", false))
     	{
-    		Log.d("loged","yes");
+    		Intent i = new Intent(getApplicationContext(), MainActivity.class);
+			startActivity(i);	
+			finish();
     		
     	}
-    	else
-    	{
-    		Log.d("loged","nope");
-    	}
+    	
     	
     	
     	

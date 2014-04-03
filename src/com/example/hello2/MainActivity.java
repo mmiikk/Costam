@@ -5,6 +5,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
@@ -28,6 +30,8 @@ public class MainActivity extends Activity {
 	
 	Button button;
 	GPSTracker gps;
+	SharedPreferences pref;
+	Editor editor;
 	
 	private LocationManager locationManager;
 	
@@ -37,7 +41,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		button = (Button) findViewById(R.id.change);
 		
-		
+		pref = getApplicationContext().getSharedPreferences("cosTamSettings", 0); 
+    	editor = pref.edit();
 		
 		try {
             // Loading map
@@ -82,7 +87,7 @@ public class MainActivity extends Activity {
             	
             	 
             	gps = new GPSTracker(MainActivity.this,googleMap);
-            	
+            	Log.d("gpscan",Boolean.toString(gps.canGetLocation()));
             	double latitude =0;
             	double longitude = 0;
                 // check if GPS enabled     
@@ -109,6 +114,7 @@ public class MainActivity extends Activity {
                     // can't get location
                     // GPS or Network is not enabled
                     // Ask user to enable GPS/network in settings
+                	
                     gps.showSettingsAlert();
                 }
            
@@ -125,7 +131,37 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+ 
+         
+        switch (item.getItemId()) {
+ 
+        case R.id.logout:
+            performLogout();
+            break;
+        
+        default:
+            break;
+ 
+        }
+ 
+       
+ 
+        return true;
+    }
 	
+	
+	private void performLogout(){
+		editor.remove("isLogged");
+		editor.commit();
+		
+		stopService(new Intent(MainActivity.this, ServiceModule.class));
+		Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+		startActivity(i);	
+		finish();
+		
+	}
 	
 	
 	

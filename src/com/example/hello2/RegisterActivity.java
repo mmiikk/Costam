@@ -3,6 +3,7 @@ package com.example.hello2;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import android.text.TextUtils;
 
 public class RegisterActivity extends Activity {
@@ -54,9 +54,22 @@ public class RegisterActivity extends Activity {
 				hashedPwd = hash.getHash(tbPassword.getText().toString());
 				DatabaseHandler db = new DatabaseHandler(getApplicationContext());
 				
-				db.addProfile(new Profile(tbLogin.getText().toString(),hashedPwd));
-				tvMessage.setVisibility(View.VISIBLE);
-				tvMessage.setText("Dodano profil, mo¿esz siê zalogowaæ");
+				Profile profile = db.getProfile(tbLogin.getText().toString(),tbPassword.getText().toString());       
+			       
+			    if(profile.getLogin() == null || profile.getPassword() == null)
+			    {
+			    	db.addProfile(new Profile(tbLogin.getText().toString(),hashedPwd));
+			   
+					tvMessage.setVisibility(View.VISIBLE);
+					tvMessage.setTextColor(Color.GREEN);
+					tvMessage.setText("Dodano profil, mo¿esz siê zalogowaæ");
+			    }
+			    else
+			    {
+			    	tvMessage.setVisibility(View.VISIBLE);
+			    	tvMessage.setTextColor(Color.RED);
+					tvMessage.setText("U¿ytkownik o takiej nazwie ju¿ istnieje");
+			    }
 		        
 			}
 		});

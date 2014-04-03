@@ -26,10 +26,10 @@ public class ServiceModule extends Service {
 	      // Let it continue running until it is stopped.
 	      Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 	      myTimerTask  = new MyTimerTask();
-	      Timer myTimer = new Timer();
+	      timer = new Timer();
 
 
-	       myTimer.schedule(myTimerTask, 3000, 1500);   
+	      timer.schedule(myTimerTask, 3000, 1500);   
 	      
 	      
 	      return START_STICKY;
@@ -44,6 +44,7 @@ public class ServiceModule extends Service {
 	   @Override
 	   public void onDestroy() {
 	      super.onDestroy();
+	      timer.cancel();
 	      Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
 	   }
 	
