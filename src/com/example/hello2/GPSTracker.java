@@ -1,5 +1,9 @@
 package com.example.hello2;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -16,7 +20,7 @@ import android.util.Log;
 public class GPSTracker extends Service implements LocationListener{
 	
 	private final Context mContext;
-	 
+	private GoogleMap googleMap; 
     // flag for GPS status
     boolean isGPSEnabled = false;
  
@@ -33,13 +37,14 @@ public class GPSTracker extends Service implements LocationListener{
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
  
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 10 * 1; // 1 minute
  
     // Declaring a Location Manager
     protected LocationManager locationManager;
  
-    public GPSTracker(Context context) {
+    public GPSTracker(Context context, GoogleMap googleMap) {
         this.mContext = context;
+        this.googleMap = googleMap;
         getLocation();
     }
 
@@ -163,15 +168,23 @@ public class GPSTracker extends Service implements LocationListener{
             dialog.cancel();
             }
         });
-  
+        
         // Showing Alert Message
         alertDialog.show();
     }
+    
+    int i;
     
 	@Override
 	public void onLocationChanged(Location arg0) {
 		// TODO Auto-generated method stub
 		
+		LatLng latLng = new LatLng(arg0.getLatitude(), arg0.getLongitude());      
+
+        
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+	
 	}
 
 	@Override

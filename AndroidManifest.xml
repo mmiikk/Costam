@@ -45,6 +45,8 @@
         <meta-data
 	    android:name="com.google.android.maps.v2.API_KEY"
 	    android:value="AIzaSyDAux-A-WNpIcDvarmYBhtNV6T4JLmAp8s"/>
+        
+        <service android:name=".ServiceModule" />
     </application>
 
     

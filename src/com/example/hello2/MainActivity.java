@@ -1,14 +1,17 @@
 package com.example.hello2;
 
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
+
 import com.google.android.gms.*;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -21,24 +24,48 @@ public class MainActivity extends Activity {
 
 	//TextView textView1;
 	//Button button1;
-	private GoogleMap googleMap;
+	public GoogleMap googleMap;
+	
+	Button button;
 	GPSTracker gps;
+	
+	private LocationManager locationManager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		button = (Button) findViewById(R.id.change);
+		
+		
 		
 		try {
             // Loading map
             initilizeMap();
- 
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
 		
+			button.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//googleMap.moveCamera(CameraUpdateFactory.newLatLng(KIEL));
+               // googleMap.animateCamera(CameraUpdateFactory.zoomTo(20));
+				
+				 startService(new Intent(MainActivity.this, ServiceModule.class));
+			}
+			
+			
+		});
+		
 		
 	}
+	
+	
 
 	private void initilizeMap() {
         if (googleMap == null) {
@@ -54,16 +81,28 @@ public class MainActivity extends Activity {
             else {
             	
             	 
-            	gps = new GPSTracker(MainActivity.this);
-            	 
+            	gps = new GPSTracker(MainActivity.this,googleMap);
+            	
             	double latitude =0;
             	double longitude = 0;
                 // check if GPS enabled     
-                if(gps.canGetLocation()){
+                if(gps.canGetLocation() && gps.isGPSEnabled){
                      
                     latitude = gps.getLatitude();
                     longitude = gps.getLongitude();
                      
+                    Log.d("gps", Double.toString(latitude));
+                    googleMap.setMyLocationEnabled(true);
+                    
+                    LatLng latLng = new LatLng(latitude, longitude);      
+            		
+                    gps.onLocationChanged(gps.getLocation());
+            		
+            		
+                 
+                    
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    googleMap.animateCamera(CameraUpdateFactory.zoomTo(20));
                     // \n is for new line
                  //   Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();    
                 }else{
@@ -72,25 +111,8 @@ public class MainActivity extends Activity {
                     // Ask user to enable GPS/network in settings
                     gps.showSettingsAlert();
                 }
-            	// create marker
-            	//MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude)).title("Hello Maps ");
-            	 
-            	// adding marker
-            	//googleMap.addMarker(marker);
-                //CameraPosition camPos = new CameraPosition().builder().target(googleMap.getMyLocation());
-                googleMap.setMyLocationEnabled(true);
-             // Get latitude of the current location
-               // double lat = googleMap.getMyLocation().getLatitude();
-
-                // Get longitude of the current location
-               // double lon = googleMap.getMyLocation().getLongitude();
-
-                // Create a LatLng object for the current location
-                LatLng latLng = new LatLng(latitude, longitude);      
-
-                // Show the current location in Google Map        
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(20));
+           
+                
             }
             
         }
@@ -102,6 +124,8 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	
 	
 	
 	

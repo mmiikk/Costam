@@ -1,15 +1,18 @@
 package com.example.hello2;
 
-import android.os.Bundle;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
 import android.util.Log;
-import java.util.List;
+import android.view.Menu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.view.View;
 
 public class LoginActivity extends Activity {
 
@@ -19,6 +22,8 @@ public class LoginActivity extends Activity {
 	EditText tbLogin;
 	EditText tbPassword;
 	DatabaseHandler db;
+	SharedPreferences pref;
+	Editor editor;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,6 +34,21 @@ public class LoginActivity extends Activity {
 		tbPassword = (EditText) findViewById(R.id.tbPassword);
 		loginError = (TextView) findViewById(R.id.loginError);
 		
+		pref = getApplicationContext().getSharedPreferences("cosTamSettings", 0); 
+    	editor = pref.edit();
+		
+    	if(pref.getBoolean("isLogged", false))
+    	{
+    		Log.d("loged","yes");
+    		
+    	}
+    	else
+    	{
+    		Log.d("loged","nope");
+    	}
+    	
+    	
+    	
 		Log.d("a", "a");
 		db = new DatabaseHandler(this);
         
@@ -72,6 +92,11 @@ public class LoginActivity extends Activity {
 			    	loginError.setVisibility(View.VISIBLE);
 			    else
 			    {
+			    		    	
+			    	editor.putBoolean("isLogged", true); // Storing boolean - true/false
+			    	editor.commit();
+
+			    	
 			    	Intent i = new Intent(getApplicationContext(),MainActivity.class);
 			    	i.putExtra("login", profile.getLogin());
 			    	i.putExtra("Id", profile.getId());
