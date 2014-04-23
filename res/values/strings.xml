@@ -6,9 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_profile_list">ProfileList</string>
+    <string name="title_activity_profiles">Profiles</string>
+    <string name="title_activity_list_profiles">ListProfiles</string>
 
-    
-    
-    
-    
 </resources>

@@ -32,9 +32,9 @@ public class MainActivity extends Activity {
 	GPSTracker gps;
 	SharedPreferences pref;
 	Editor editor;
+	String mysqlId;
 	
-	private LocationManager locationManager;
-	
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,10 +58,9 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//googleMap.moveCamera(CameraUpdateFactory.newLatLng(KIEL));
-               // googleMap.animateCamera(CameraUpdateFactory.zoomTo(20));
 				
-				 startService(new Intent(MainActivity.this, ServiceModule.class));
+				Intent i = new Intent(MainActivity.this, ServiceModule.class);
+				startService(i);
 			}
 			
 			
@@ -154,6 +153,9 @@ public class MainActivity extends Activity {
 	
 	private void performLogout(){
 		editor.remove("isLogged");
+		editor.remove("mysqlId");
+		editor.remove("Id");
+		editor.remove("login");
 		editor.commit();
 		
 		stopService(new Intent(MainActivity.this, ServiceModule.class));

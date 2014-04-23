@@ -93,12 +93,16 @@ public class LoginActivity extends Activity {
 			    {
 			    		    	
 			    	editor.putBoolean("isLogged", true); // Storing boolean - true/false
+			    	editor.putString("login", profile.getLogin());
+			    	editor.putString("mysqlId", profile.getMysqlId());
+			    			    	
+			    	editor.putInt("Id", profile.getId());
+			    	
 			    	editor.commit();
 
 			    	
 			    	Intent i = new Intent(getApplicationContext(),MainActivity.class);
-			    	i.putExtra("login", profile.getLogin());
-			    	i.putExtra("Id", profile.getId());
+			    	
 			    	startActivity(i);
 			    	finish();
 			    	

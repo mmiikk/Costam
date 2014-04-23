@@ -10,13 +10,14 @@ import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 	private static final String DB_NAME = "costamDB";
 	private static final String TABLE_NAME = "profiles";
 	
 	private static final String KEY_ID = "_id";
 	private static final String KEY_LGN = "login";
 	private static final String KEY_PWD = "password";
+	private static final String KEY_MYSQL = "mysqlId";
 	
 	public DatabaseHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -27,7 +28,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// Create table
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_LGN + " TEXT,"
-                + KEY_PWD + " TEXT" + ")";
+                + KEY_PWD + " TEXT" + ", " + KEY_MYSQL + " TEXT)";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 	
@@ -45,6 +46,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ContentValues content = new ContentValues();
 		content.put(KEY_LGN, profile.getLogin());
 		content.put(KEY_PWD, profile.getPassword());
+		content.put(KEY_MYSQL, profile.getMysqlId());
 		
 		db.insert(TABLE_NAME, null, content);
 		db.close();
@@ -58,10 +60,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		
 		if (cursor.moveToFirst()) {
 	        do {
+	        	
 	            Profile profile = new Profile();
 	            profile.setId(Integer.parseInt(cursor.getString(0)));
 	            profile.setLogin(cursor.getString(1));
 	            profile.setPassword(cursor.getString(2));
+	            profile.setMysqlId(cursor.getString(3));
 	            // Adding contact to list
 	            profileList.add(profile);
 	        } while (cursor.moveToNext());
@@ -89,6 +93,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	            profile.setId(Integer.parseInt(cursor.getString(0)));
 	            profile.setLogin(cursor.getString(1));
 	            profile.setPassword(cursor.getString(2));
+	            profile.setMysqlId(cursor.getString(3));
 	            // Adding contact to list
 	           
 	        } while (cursor.moveToNext());

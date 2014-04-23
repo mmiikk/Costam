@@ -132,6 +132,8 @@ public class GPSTracker extends Service implements LocationListener{
         }
          
         // return longitude
+        
+        
         return longitude;
     }
     
@@ -179,11 +181,20 @@ public class GPSTracker extends Service implements LocationListener{
 	public void onLocationChanged(Location arg0) {
 		// TODO Auto-generated method stub
 		
-		LatLng latLng = new LatLng(arg0.getLatitude(), arg0.getLongitude());      
-
-        
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+		if(googleMap!= null)
+		{
+			LatLng latLng = new LatLng(arg0.getLatitude(), arg0.getLongitude());      
+	
+	        
+	        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+	        googleMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+		}
+		else
+		{
+			/*longitude = arg0.getLongitude();
+			latitude = arg0.getLatitude();
+			Log.d("aa",Double.toString(longitude));*/
+		}
 	
 	}
 
